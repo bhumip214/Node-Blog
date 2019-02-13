@@ -63,6 +63,26 @@ router.post("/", async (req, res) => {
 
 // DELETE user request
 
+router.delete("/:id", async (req, res) => {
+  try {
+    const count = await Users.remove(req.params.id);
+    if (count > 0) {
+      res
+        .status(200)
+        .json({ message: "The user has been successfully deleted" });
+    } else {
+      res
+        .status(404)
+        .json({ message: "The user with the specified ID does not exist." });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "The user could not be deleted"
+    });
+  }
+});
+
 // UPDATE user request
 
 module.exports = router;
