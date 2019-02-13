@@ -100,4 +100,17 @@ router.put("/:id", async (req, res) => {
   }
 });
 
+//GET user posts request
+router.get("/:id/posts", async (req, res) => {
+  try {
+    const posts = await Users.getUserPosts(req.params.id);
+    res.status(200).json(posts);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "The posts information for user could not be retrieved."
+    });
+  }
+});
+
 module.exports = router;
