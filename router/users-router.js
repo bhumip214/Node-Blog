@@ -43,10 +43,9 @@ router.get("/:id", async (req, res) => {
 // POST user request
 router.post("/", async (req, res) => {
   try {
-    const { name } = req.body;
     const user = await Users.insert(req.body);
 
-    if (name) {
+    if (user.name) {
       res.status(201).json(user);
     } else {
       res
@@ -62,7 +61,6 @@ router.post("/", async (req, res) => {
 });
 
 // DELETE user request
-
 router.delete("/:id", async (req, res) => {
   try {
     const count = await Users.remove(req.params.id);
@@ -84,5 +82,22 @@ router.delete("/:id", async (req, res) => {
 });
 
 // UPDATE user request
+router.put("/:id", async (req, res) => {
+  try {
+    const user = await Users.update(req.params.id, req.body);
+    if (user) {
+      res.status(200).json(user);
+    } else {
+      res
+        .status(404)
+        .json({ message: "The user with the specified ID does not exist." });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "The user information could not be modified."
+    });
+  }
+});
 
 module.exports = router;
