@@ -2,8 +2,21 @@ const express = require("express");
 
 const Posts = require("../data/helpers/postDb");
 
-const postsRouter = express.Router();
+const router = express.Router();
 
-postsRouter.use(express.json());
+router.use(express.json());
 
-module.exports = postsRouter;
+// GET posts request
+router.get("/", async (req, res) => {
+  try {
+    const posts = await Posts.get(req.query);
+    res.status(200).json(posts);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "The posts information could not be retrieved."
+    });
+  }
+});
+
+module.exports = router;

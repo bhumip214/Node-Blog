@@ -12,7 +12,6 @@ router.get("/", async (req, res) => {
     const users = await Users.get(req.query);
     res.status(200).json(users);
   } catch (error) {
-    // log error to database
     console.log(error);
     res.status(500).json({
       message: "The users information could not be retrieved."

@@ -12,6 +12,7 @@ server.use(cors());
 server.use(helmet());
 server.use(morgan("dev"));
 server.use("/api/users", usersRouter);
+server.use("/api/posts", postsRouter);
 
 server.get("/", async (req, res, next) => {
   res.send(`
