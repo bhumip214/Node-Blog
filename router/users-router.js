@@ -9,7 +9,7 @@ router.use(express.json());
 
 const nameUppercase = (req, res, next) => {
   const name = req.body.name;
-  if (name !== name.toUpperCase()) {
+  if (name[0] !== name[0].toUpperCase()) {
     res.status(400).json({ message: "Username must be in uppercase." });
   } else {
     next();
@@ -143,25 +143,25 @@ router.get("/:id/posts/:postId", async (req, res) => {
 });
 
 // // POST post request
-// router.post("/:id/posts", async (req, res) => {
-//   try {
-//     const post = await Posts.insert(req.body);
-//     const user = await Users.insert(req.body);
+router.post("/:id/posts", async (req, res) => {
+  const postInfo = { ...req.body, user_id: req.params.id };
+  try {
+    const post = await Posts.insert(postInfo);
 
-//     if (post.text && user.id) {
-//       res.status(201).json(post);
-//     } else {
-//       res.status(400).json({
-//         errorMessage: "Please provide text and user_id for the post."
-//       });
-//     }
-//   } catch (error) {
-//     console.log(error);
-//     res.status(500).json({
-//       message: "There was an error while saving the post."
-//     });
-//   }
-// });
+    if (post.text && post.user_id) {
+      res.status(201).json(post);
+    } else {
+      res.status(400).json({
+        errorMessage: "Please provide the text for the post."
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "There was an error while saving the post."
+    });
+  }
+});
 
 // DELETE post request
 router.delete("/:id/posts/:postId", async (req, res) => {
