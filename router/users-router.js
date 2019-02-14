@@ -7,6 +7,15 @@ const router = express.Router();
 
 router.use(express.json());
 
+const nameUppercase = (req, res, next) => {
+  const name = req.body.name;
+  if (name !== name.toUpperCase()) {
+    res.status(400).json({ message: "Username must be in uppercase." });
+  } else {
+    next();
+  }
+};
+
 // GET users request
 router.get("/", async (req, res) => {
   try {
@@ -41,7 +50,7 @@ router.get("/:id", async (req, res) => {
 });
 
 // POST user request
-router.post("/", async (req, res) => {
+router.post("/", nameUppercase, async (req, res) => {
   try {
     const user = await Users.insert(req.body);
 
@@ -82,7 +91,7 @@ router.delete("/:id", async (req, res) => {
 });
 
 // UPDATE user request
-router.put("/:id", async (req, res) => {
+router.put("/:id", nameUppercase, async (req, res) => {
   try {
     const user = await Users.update(req.params.id, req.body);
     if (user) {
